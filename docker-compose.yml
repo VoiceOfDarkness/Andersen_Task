@@ -1,0 +1,19 @@
+services:
+  database:
+    image: postgres:16
+    env_file:
+      - .env
+    volumes:
+      - andersen_todo:/var/lib/postgresql/data/
+    restart: on-failure:3
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  andersen_todo:
