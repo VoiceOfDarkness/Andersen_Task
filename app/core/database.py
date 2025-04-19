@@ -6,8 +6,7 @@ from typing import AsyncGenerator
 
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import (AsyncSession, async_scoped_session,
-                                    create_async_engine, async_sessionmaker)
-
+                                    async_sessionmaker, create_async_engine)
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -31,7 +30,7 @@ class Database:
         try:
             yield session
             await session.commit()
-        except SQLAlchemyError as e:
+        except Exception as e:
             logging.error(f"Session rollback due to exception: {e}")
             logging.error(traceback.format_exc())
             await session.rollback()

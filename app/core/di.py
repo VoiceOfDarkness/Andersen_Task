@@ -1,7 +1,8 @@
 from dependency_injector import containers, providers
-from database import Database
-from config import settings
+
+from .config import settings
+from .database import Database
 
 
 class Container(containers.DeclarativeContainer):
-    database = providers.Singleton(Database, db_url=settings.async_database_url)
+    database = providers.Singleton(Database, db_url=settings.DATABASE_URL)
