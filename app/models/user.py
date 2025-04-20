@@ -16,4 +16,3 @@ class User(Base):
     username: Mapped[Optional[str]] = mapped_column(String, nullable=True, unique=True)
     password: Mapped[str] = mapped_column(String, nullable=False)
     tasks: Mapped["Task"] = relationship(back_populates="user", cascade="all, delete-orphan")
-
