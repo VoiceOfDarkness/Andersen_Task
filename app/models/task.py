@@ -17,7 +17,7 @@ class TaskStatus(str, PyEnum):
 class Task(Base):
     __tablename__ = 'task'
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID, primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     title: Mapped[str] = mapped_column(String, nullable=False)
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     status: Mapped[Annotated[TaskStatus, "Current status of task"]] = mapped_column(Enum(TaskStatus),

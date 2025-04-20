@@ -3,15 +3,21 @@ from dependency_injector import containers, providers
 from .config import settings
 from .database import Database
 
-from repository import UserRepository
-from services import UserService
+from repository import UserRepository, TaskRepository
+from services import UserService, TaskService
 
 
 class Container(containers.DeclarativeContainer):
+    wiring_config = containers.WiringConfiguration(
+        modules=[
+            "api.v1.routes.task"
+        ]
+    )
+
     database = providers.Singleton(Database, db_url=settings.DATABASE_URL)
 
     user_repository = providers.Factory(UserRepository, session_factory=database.provided.session)
-    task_repository = providers.Factory(UserRepository, session_factory=database.provided.session)
+    task_repository = providers.Factory(TaskRepository, session_factory=database.provided.session)
 
     user_service = providers.Factory(UserService, user_repository=user_repository)
-    task_service = providers.Factory(UserService, user_repository=user_repository)
+    task_service = providers.Factory(TaskService, task_repository=task_repository)

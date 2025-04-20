@@ -10,7 +10,7 @@ from models.base import Base
 class User(Base):
     __tablename__ = 'user'
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID, primary_key=True, default=uuid.uuid4)
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     first_name: Mapped[str] = mapped_column(String, nullable=False)
     last_name: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     username: Mapped[Optional[str]] = mapped_column(String, nullable=True, unique=True)

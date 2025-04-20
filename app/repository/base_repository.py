@@ -35,10 +35,9 @@ class BaseRepository[Model: Base, CreateSchema: BaseModel, UpdateSchema: BaseMod
     async def create(self, data: CreateSchema):
         async with self.session_factory() as session:
             async with session.begin():
-                db_obj = await self.model_class.create(**data.model_dump())
+                db_obj = self.model_class(**data.model_dump())
                 session.add(db_obj)
                 await session.flush()
-                return db_obj
 
     async def update(self, id: UUID, data: UpdateSchema):
         async with self.session_factory() as session:
@@ -55,7 +54,7 @@ class BaseRepository[Model: Base, CreateSchema: BaseModel, UpdateSchema: BaseMod
                     setattr(obj, field, val)
 
                 await session.flush()
-                return record
+                return obj
 
     async def delete(self, id: UUID):
         async with self.session_factory() as session:

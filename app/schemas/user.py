@@ -17,5 +17,4 @@ class UserCreate(UserBase):
 
 
 class UserInDB(UserBase):
-    id: UUID
     hashed_password: str
