@@ -4,6 +4,7 @@ from uuid import UUID
 from starlette.responses import JSONResponse
 
 from core.exceptions import ObjectNotFoundException
+from schemas.pagination import PaginationResponse
 from models.base import Base
 from pydantic import BaseModel
 from repository.base_repository import BaseRepository
@@ -46,9 +47,9 @@ class BaseService[Model: Base, CreateSchema: BaseModel, UpdateSchema: BaseModel,
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Can't delete an object: {str(e)}"
             )
 
-    async def get(self, id: UUID, **filters):
+    async def get(self, id: UUID):
         try:
-            return await self.repository.get(id, **filters)
+            return await self.repository.get(id)
         except ObjectNotFoundException:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=f"object with id {id} not found"
@@ -58,9 +59,9 @@ class BaseService[Model: Base, CreateSchema: BaseModel, UpdateSchema: BaseModel,
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Can't get an object: {str(e)}"
             )
 
-    async def get_all(self, **filters):
+    async def get_all(self):
         try:
-            return await self.repository.get_all(**filters)
+            return await self.repository.get_all()
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Can't get an object: {str(e)}"

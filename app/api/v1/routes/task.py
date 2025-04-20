@@ -5,7 +5,9 @@ import uuid
 from fastapi.params import Query
 
 from core.di import Container
+from schemas.pagination import PaginationParams
 from schemas.task import TaskResponse, TaskCreate, TaskInDB, TaskUpdate, TaskUpdateInDB, TaskStatus
+from schemas.pagination import PaginationResponse
 from typing import List, Optional
 
 from services.task_service import TaskService
@@ -13,12 +15,13 @@ from services.task_service import TaskService
 task_router = APIRouter(tags=["task"])
 
 
-@task_router.get("/tasks", response_model=List[TaskResponse])
+@task_router.get("/tasks", response_model=PaginationResponse[TaskResponse])
 @inject
 async def get_tasks(
+        pagination: PaginationParams = Depends(),
         status: Optional[TaskStatus] = Query(None, description="Filter tasks by status"),
         task_service: TaskService = Depends(Provide[Container.task_service])):
-    return await task_service.get_all(status=status)
+    return await task_service.get_all(status=status, pagination=pagination)
 
 
 @task_router.get("/task", response_model=Optional[TaskResponse])
