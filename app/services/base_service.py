@@ -4,7 +4,6 @@ from uuid import UUID
 from starlette.responses import JSONResponse
 
 from core.exceptions import ObjectNotFoundException
-from schemas.pagination import PaginationResponse
 from models.base import Base
 from pydantic import BaseModel
 from repository.base_repository import BaseRepository

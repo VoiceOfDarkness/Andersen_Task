@@ -14,7 +14,7 @@ class PaginationParams(BaseModel):
 class PaginationResponse[T](BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    items: List[T]
+    items: List[T] | T
     total: int
     page: int
     page_size: int

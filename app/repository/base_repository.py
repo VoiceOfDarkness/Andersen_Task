@@ -38,6 +38,7 @@ class BaseRepository[Model: Base, CreateSchema: BaseModel, UpdateSchema: BaseMod
                 db_obj = self.model_class(**data.model_dump())
                 session.add(db_obj)
                 await session.flush()
+                return db_obj
 
     async def update(self, id: UUID, data: UpdateSchema):
         async with self.session_factory() as session:
@@ -49,7 +50,7 @@ class BaseRepository[Model: Base, CreateSchema: BaseModel, UpdateSchema: BaseMod
                 if obj is None:
                     raise ObjectNotFoundException(self.model_class.__name__, id)
 
-                update_data = data.model_dump(exclude_unset=True)
+                update_data = data.model_dump(exclude_unset=True, exclude_none=True)
                 for field, val in update_data.items():
                     setattr(obj, field, val)
 

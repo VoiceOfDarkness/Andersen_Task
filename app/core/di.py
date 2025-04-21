@@ -4,13 +4,16 @@ from .config import settings
 from .database import Database
 
 from repository import UserRepository, TaskRepository
-from services import UserService, TaskService
+from services import UserService, TaskService, AuthService
 
 
 class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
-            "api.v1.routes.task"
+            "api.v1.routes.task",
+            "api.v1.routes.auth",
+            "api.v1.routes.user",
+            "api.deps"
         ]
     )
 
@@ -20,4 +23,5 @@ class Container(containers.DeclarativeContainer):
     task_repository = providers.Factory(TaskRepository, session_factory=database.provided.session)
 
     user_service = providers.Factory(UserService, user_repository=user_repository)
+    auth_service = providers.Factory(AuthService, user_repository=user_repository)
     task_service = providers.Factory(TaskService, task_repository=task_repository)
