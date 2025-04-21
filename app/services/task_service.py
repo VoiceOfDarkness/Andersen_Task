@@ -92,6 +92,8 @@ class TaskService(BaseService[Task, TaskInDB, TaskUpdateInDB, TaskRepository]):
                 page_size=pagination.page_size,
                 pages=total_pages
             )
+        except ObjectNotFoundException:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"objects not found")
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"

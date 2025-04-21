@@ -2,7 +2,7 @@ import uuid
 
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Body
 
 from dependency_injector.wiring import inject, Provide
 
@@ -34,11 +34,13 @@ async def delete_task(current_user: CurrentUser,
 
 @user_router.patch("/task")
 @inject
-async def update_task(task: TaskUpdate,
-                      current_user: CurrentUser,
+async def update_task(current_user: CurrentUser,
+                      task: Optional[TaskUpdate] = Body(None),
+                      status: Optional[TaskStatus] = Query(None),
                       task_id: uuid.UUID = Query(..., example="fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca"),
                       task_service: TaskService = Depends(Provide[Container.task_service])):
-    return await task_service.update_user_task(task_id, current_user.id, TaskUpdateInDB(**task.model_dump()))
+    return await task_service.update_user_task(task_id, current_user.id,
+                                               TaskUpdateInDB(status=status, **task.model_dump()))
 
 
 @user_router.get("/task", response_model=PaginationResponse[TaskResponse])
