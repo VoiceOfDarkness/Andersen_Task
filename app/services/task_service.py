@@ -25,7 +25,7 @@ class TaskService(BaseService[Task, TaskInDB, TaskUpdateInDB, TaskRepository]):
             )
         except Exception as e:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Can't get an object: {str(e)}"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
             )
 
     async def get_all(self, **filters):
@@ -47,21 +47,21 @@ class TaskService(BaseService[Task, TaskInDB, TaskUpdateInDB, TaskRepository]):
             )
         except Exception as e:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Can't get an object: {str(e)}"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
             )
 
     async def delete_user_task(self, id: UUID, user_id: UUID):
         try:
-            result = await self.task_repository.delete_user_task(id, user_id)
-            return JSONResponse(None, status_code=status.HTTP_204_NO_CONTENT)
+            await self.task_repository.delete_user_task(id, user_id)
         except ObjectNotFoundException as e:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
             )
         except Exception as e:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Can't delete an object: {str(e)}"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
             )
+        return JSONResponse(status_code=status.HTTP_204_NO_CONTENT, content="deleted")
 
     async def update_user_task(self, id: UUID, user_id: UUID, task: TaskUpdateInDB):
         try:
@@ -72,7 +72,7 @@ class TaskService(BaseService[Task, TaskInDB, TaskUpdateInDB, TaskRepository]):
             )
         except Exception as e:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Can't update an object: {str(e)}"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
             )
 
     async def get_user_task(self, user_id: UUID, **filters):
@@ -94,5 +94,5 @@ class TaskService(BaseService[Task, TaskInDB, TaskUpdateInDB, TaskRepository]):
             )
         except Exception as e:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Can't get an object: {str(e)}"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
             )

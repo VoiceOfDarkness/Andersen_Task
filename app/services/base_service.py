@@ -1,7 +1,6 @@
 from fastapi import HTTPException, status
+from fastapi.responses import JSONResponse
 from uuid import UUID
-
-from starlette.responses import JSONResponse
 
 from core.exceptions import ObjectNotFoundException
 from models.base import Base
@@ -18,7 +17,7 @@ class BaseService[Model: Base, CreateSchema: BaseModel, UpdateSchema: BaseModel,
             await self.repository.create(data)
         except Exception as e:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Can't create an object: {str(e)}"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
             )
         return JSONResponse(status_code=status.HTTP_201_CREATED, content="created")
 
@@ -31,20 +30,21 @@ class BaseService[Model: Base, CreateSchema: BaseModel, UpdateSchema: BaseModel,
             )
         except Exception as e:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Can't update an object: {str(e)}"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
             )
 
     async def delete(self, id: UUID):
         try:
-            return await self.repository.delete(id)
+            await self.repository.delete(id)
         except ObjectNotFoundException as e:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
             )
         except Exception as e:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Can't delete an object: {str(e)}"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
             )
+        return JSONResponse(status_code=status.HTTP_204_NO_CONTENT, content="deleted")
 
     async def get(self, id: UUID):
         try:
@@ -55,7 +55,7 @@ class BaseService[Model: Base, CreateSchema: BaseModel, UpdateSchema: BaseModel,
             )
         except Exception as e:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Can't get an object: {str(e)}"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
             )
 
     async def get_all(self):
@@ -63,5 +63,5 @@ class BaseService[Model: Base, CreateSchema: BaseModel, UpdateSchema: BaseModel,
             return await self.repository.get_all()
         except Exception as e:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Can't get an object: {str(e)}"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
             )
