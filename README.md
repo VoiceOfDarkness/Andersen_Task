@@ -8,7 +8,7 @@ TODO list API is a task management system that allows users to create, update, d
 FastAPI's asynchronous framework, it provides high-performance API endpoints with automatic validation, serialization,
 and documentation.
 <p align="center">
-  <img src="https://github.com/VoiceOfDarkness/Andersen_Task/blob/main/images/img.png" alt="Project Logo" width="200"/>
+  <img src="https://github.com/VoiceOfDarkness/Andersen_Task/blob/main/images/img.png" alt="Project Logo"/>
 </p>
 ## ✨ Features
 
