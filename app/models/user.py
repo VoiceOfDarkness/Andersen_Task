@@ -1,8 +1,8 @@
 import uuid
 from typing import Optional
 
+from sqlalchemy import UUID, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, UUID, Text
 
 from app.models.base import Base
 
@@ -16,4 +16,4 @@ class User(Base):
     last_name: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     username: Mapped[Optional[str]] = mapped_column(String, nullable=True, unique=True)
     password: Mapped[str] = mapped_column(String, nullable=False)
-    tasks: Mapped["Task"] = relationship(back_populates="user", cascade="all, delete-orphan")
+    tasks: Mapped["Task"] = relationship(back_populates="user", cascade="all, delete-orphan")  # noqa

@@ -1,8 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.v1.routes import task
-from app.api.v1.routes import auth
-from app.api.v1.routes import user
+from app.api.v1.routes import auth, task, user
 
 api_router = APIRouter()
 

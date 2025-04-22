@@ -1,8 +1,10 @@
 from contextlib import asynccontextmanager
-from app.core.di import Container
+
 from fastapi import FastAPI
+
 from app.api.main import api_router
 from app.core.config import settings
+from app.core.di import Container
 
 
 @asynccontextmanager

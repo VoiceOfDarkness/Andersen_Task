@@ -1,2 +1,2 @@
-from app.repository.user_repository import UserRepository
-from app.repository.task_repository import TaskRepository
+from app.repository.task_repository import TaskRepository  # noqa
+from app.repository.user_repository import UserRepository  # noqa

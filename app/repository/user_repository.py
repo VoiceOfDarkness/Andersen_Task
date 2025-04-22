@@ -1,7 +1,7 @@
 from sqlalchemy.future import select
 
-from app.repository.base_repository import BaseRepository
 from app.models.user import User
+from app.repository.base_repository import BaseRepository
 from app.schemas.user import UserInDB
 
 

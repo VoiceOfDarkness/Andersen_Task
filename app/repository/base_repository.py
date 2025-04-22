@@ -3,11 +3,11 @@ from typing import Callable
 from uuid import UUID
 
 from pydantic import BaseModel
-
-from app.models.base import Base
-from app.core.exceptions import ObjectNotFoundException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+
+from app.core.exceptions import ObjectNotFoundException
+from app.models.base import Base
 
 
 class BaseRepository[Model: Base, CreateSchema: BaseModel, UpdateSchema: BaseModel]:

@@ -1,17 +1,16 @@
 import uuid
+from typing import Dict, Optional
 
-from typing import Optional, Dict
-
-from fastapi import APIRouter, Depends, Query, Body
-
-from dependency_injector.wiring import inject, Provide
+from dependency_injector.wiring import Provide, inject
+from fastapi import APIRouter, Body, Depends, Query
 
 from app.api.deps import get_current_user
 from app.core.di import Container
-from app.models import User
+from app.models.user import User
+from app.schemas.pagination import PaginationParams, PaginationResponse
+from app.schemas.task import (TaskCreate, TaskInDB, TaskResponse, TaskStatus,
+                              TaskUpdate, TaskUpdateInDB)
 from app.services.task_service import TaskService
-from app.schemas.pagination import PaginationResponse, PaginationParams
-from app.schemas.task import TaskCreate, TaskInDB, TaskUpdate, TaskUpdateInDB, TaskResponse, TaskStatus
 
 user_router = APIRouter(tags=["user"], prefix="/user")
 

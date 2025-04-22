@@ -1,9 +1,9 @@
 import uuid
 from enum import Enum as PyEnum
-from typing import Optional, Annotated
+from typing import Annotated, Optional
 
-from sqlalchemy.orm import Mapped, mapped_column, Relationship
-from sqlalchemy import String, UUID, Text, Enum, ForeignKey
+from sqlalchemy import UUID, Enum, ForeignKey, String, Text
+from sqlalchemy.orm import Mapped, Relationship, mapped_column
 
 from app.models.base import Base
 
@@ -24,4 +24,4 @@ class Task(Base):
     status: Mapped[Annotated[TaskStatus, "Current status of task"]] = mapped_column(Enum(TaskStatus),
                                                                                     default=TaskStatus.NEW)
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('user.id'))
-    user: Mapped["User"] = Relationship(back_populates="tasks")
+    user: Mapped["User"] = Relationship(back_populates="tasks")  # noqa

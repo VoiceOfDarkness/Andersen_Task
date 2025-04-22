@@ -213,9 +213,6 @@ The project includes a test suite:
 # Run all tests
 docker-compose exec api poetry run pytest
 
-# Run with coverage report
-docker-compose exec api poetry run pytest --cov=app
-
 # Run specific test file
 docker-compose exec api poetry run pytest tests/unit/endpoints/test_auth_endpoints.py
 ```

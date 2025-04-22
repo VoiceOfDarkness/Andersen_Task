@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field, ConfigDict
 from typing import List
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class PaginationParams(BaseModel):

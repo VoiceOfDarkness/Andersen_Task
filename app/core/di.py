@@ -2,9 +2,8 @@ from dependency_injector import containers, providers
 
 from app.core.config import settings
 from app.core.database import Database
-
-from app.repository import UserRepository, TaskRepository
-from app.services import UserService, TaskService, AuthService
+from app.repository import TaskRepository, UserRepository
+from app.services import AuthService, TaskService, UserService
 
 
 class Container(containers.DeclarativeContainer):

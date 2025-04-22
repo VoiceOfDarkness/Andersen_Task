@@ -1,8 +1,7 @@
-from fastapi import APIRouter, Depends, Response, Request
+from dependency_injector.wiring import Provide, inject
+from fastapi import APIRouter, Depends, Request, Response
 
 from app.core.di import Container
-from dependency_injector.wiring import inject, Provide
-
 from app.schemas.auth import LoginRequest
 from app.schemas.user import UserCreate
 from app.services import AuthService

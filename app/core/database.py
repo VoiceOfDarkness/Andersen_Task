@@ -19,8 +19,6 @@ class Database:
             scopefunc=asyncio.current_task)
 
     async def init_db(self):
-        import app.models
-
         async with self._engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
 

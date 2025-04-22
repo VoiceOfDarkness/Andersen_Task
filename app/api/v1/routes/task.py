@@ -1,17 +1,15 @@
-from dependency_injector.wiring import inject, Provide
-from fastapi import APIRouter, Depends
 import uuid
-
-from fastapi.params import Query
-
-from app.core.di import Container
-from app.models import User
-from app.schemas.pagination import PaginationParams
-from app.schemas.task import TaskResponse, TaskStatus
-from app.schemas.pagination import PaginationResponse
 from typing import Optional
 
+from dependency_injector.wiring import Provide, inject
+from fastapi import APIRouter, Depends
+from fastapi.params import Query
+
 from app.api.deps import get_current_user
+from app.core.di import Container
+from app.models.user import User
+from app.schemas.pagination import PaginationParams, PaginationResponse
+from app.schemas.task import TaskResponse, TaskStatus
 from app.services.task_service import TaskService
 
 task_router = APIRouter(tags=["task"])

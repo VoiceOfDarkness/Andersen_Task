@@ -4,7 +4,7 @@ from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 
 from app.core.exceptions import ObjectNotFoundException
-from app.models import Task
+from app.models.task import Task
 from app.repository.task_repository import TaskRepository
 from app.schemas.pagination import PaginationResponse
 from app.schemas.task import TaskInDB, TaskUpdateInDB
@@ -23,9 +23,9 @@ class TaskService(BaseService[Task, TaskInDB, TaskUpdateInDB, TaskRepository]):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=f"object with id {id} not found"
             )
-        except Exception as e:
+        except Exception:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error"
             )
 
     async def get_all(self, **filters):
@@ -45,9 +45,9 @@ class TaskService(BaseService[Task, TaskInDB, TaskUpdateInDB, TaskRepository]):
                 page_size=pagination.page_size,
                 pages=total_pages
             )
-        except Exception as e:
+        except Exception:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error"
             )
 
     async def delete_user_task(self, id: UUID, user_id: UUID):
@@ -57,9 +57,9 @@ class TaskService(BaseService[Task, TaskInDB, TaskUpdateInDB, TaskRepository]):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
             )
-        except Exception as e:
+        except Exception:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error"
             )
         return JSONResponse(status_code=status.HTTP_204_NO_CONTENT, content="deleted")
 
@@ -70,9 +70,9 @@ class TaskService(BaseService[Task, TaskInDB, TaskUpdateInDB, TaskRepository]):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail=f"object with id {id} not found"
             )
-        except Exception as e:
+        except Exception:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error"
             )
 
     async def get_user_task(self, user_id: UUID, **filters):
@@ -93,8 +93,8 @@ class TaskService(BaseService[Task, TaskInDB, TaskUpdateInDB, TaskRepository]):
                 pages=total_pages
             )
         except ObjectNotFoundException:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"objects not found")
-        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="objects not found")
+        except Exception:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Internal server error"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error"
             )
