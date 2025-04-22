@@ -10,6 +10,7 @@ and documentation.
 <p align="center">
   <img src="https://github.com/VoiceOfDarkness/Andersen_Task/blob/main/images/img.png" alt="Project Logo"/>
 </p>
+
 ## ✨ Features
 
 - **User Authentication**: Secure JWT-based authentication with token refresh mechanism
