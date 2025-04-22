@@ -1,12 +1,12 @@
 from fastapi import HTTPException, status, Response, Request
 from jose import JWTError
 
-from models import User
-from schemas.auth import LoginRequest
-from services.base_service import BaseService
-from schemas.user import UserCreate, UserInDB
-from repository.user_repository import UserRepository
-from core.security import hash_password, create_tokens, verify_password, decode_token
+from app.models import User
+from app.schemas.auth import LoginRequest
+from app.services.base_service import BaseService
+from app.schemas.user import UserCreate, UserInDB
+from app.repository.user_repository import UserRepository
+from app.core.security import hash_password, create_tokens, verify_password, decode_token
 
 
 class AuthService(BaseService[User, UserInDB, UserCreate, UserRepository]):

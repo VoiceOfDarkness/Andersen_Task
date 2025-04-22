@@ -1,7 +1,7 @@
-from models import User
-from services.base_service import BaseService
-from schemas.user import UserCreate, UserInDB
-from repository.user_repository import UserRepository
+from app.models import User
+from app.services.base_service import BaseService
+from app.schemas.user import UserCreate, UserInDB
+from app.repository.user_repository import UserRepository
 
 
 class UserService(BaseService[User, UserInDB, UserCreate, UserRepository]):

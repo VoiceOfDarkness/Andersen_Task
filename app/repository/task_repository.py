@@ -1,11 +1,11 @@
-from repository.base_repository import BaseRepository
+from app.repository.base_repository import BaseRepository
 from uuid import UUID
-from models.task import Task
-from schemas.task import TaskInDB, TaskUpdateInDB
+from app.models.task import Task
+from app.schemas.task import TaskInDB, TaskUpdateInDB
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy import func
-from core.exceptions import ObjectNotFoundException
+from app.core.exceptions import ObjectNotFoundException
 
 
 class TaskRepository(BaseRepository[Task, TaskInDB, TaskUpdateInDB]):

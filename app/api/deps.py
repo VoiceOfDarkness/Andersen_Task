@@ -3,9 +3,9 @@ from fastapi import Depends, Request, status, HTTPException
 from dependency_injector.wiring import inject, Provide
 from jose import JWTError
 
-from core.security import decode_token
-from core.di import Container
-from services import AuthService
+from app.core.security import decode_token
+from app.core.di import Container
+from app.services import AuthService
 
 
 @inject

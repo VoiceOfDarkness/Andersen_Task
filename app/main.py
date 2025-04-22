@@ -1,13 +1,18 @@
+from contextlib import asynccontextmanager
+from app.core.di import Container
 from fastapi import FastAPI
-
-app = FastAPI()
-
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+from app.api.main import api_router
 
 
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    app.container = Container()
+    db = app.container.database()
+    await db.init_db()
+
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+app.container = Container()
+app.include_router(api_router)

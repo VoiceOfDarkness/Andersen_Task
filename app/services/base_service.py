@@ -2,10 +2,10 @@ from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 from uuid import UUID
 
-from core.exceptions import ObjectNotFoundException
-from models.base import Base
+from app.core.exceptions import ObjectNotFoundException
+from app.models.base import Base
 from pydantic import BaseModel
-from repository.base_repository import BaseRepository
+from app.repository.base_repository import BaseRepository
 
 
 class BaseService[Model: Base, CreateSchema: BaseModel, UpdateSchema: BaseModel, RepoType: BaseRepository]:
