@@ -40,7 +40,7 @@ def test_get_user_tasks(client, mock_task_service, override_dependencies):
     assert user_id_arg == uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca")
 
 
-def test_get_tasks_with_filter(client, mock_task_service, override_dependencies):
+def test_get_user_tasks_with_filter(client, mock_task_service, override_dependencies):
     response = client.get("/user/tasks?status=New")
 
     assert response.status_code == 200

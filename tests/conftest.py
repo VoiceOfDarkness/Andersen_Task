@@ -7,7 +7,8 @@ from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 from fastapi.testclient import TestClient
 from schemas.pagination import PaginationResponse
-from services import TaskService
+from schemas.user import UserResponse
+from services import TaskService, AuthService
 
 from app.core.config import settings
 from app.core.database import Database
@@ -66,6 +67,65 @@ def mock_task_service():
         })
 
     service.create.side_effect = mock_create
+
+    async def mock_get_all(**filters):
+        items = [
+            {
+                "id": uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca"),
+                "title": "Test Task 1",
+                "description": "Test Description 1",
+                "status": TaskStatus.NEW,
+                "user_id": uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca"),
+                "user": {
+                    "id": uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca"),
+                    "username": "testuser",
+                    "first_name": "Test",
+                    "last_name": "Test"
+                }
+            },
+            {
+                "id": uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813cb"),
+                "title": "Test Task 2",
+                "description": "Test Description 2",
+                "status": TaskStatus.COMPLETED,
+                "user_id": uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca"),
+                "user": {
+                    "id": uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca"),
+                    "username": "testuser",
+                    "first_name": "Test",
+                    "last_name": "Test"
+                }
+            }
+        ]
+        return PaginationResponse(
+            items=items,
+            total=2,
+            page=filters.get("pagination").page if "pagination" in filters else 1,
+            page_size=filters.get("pagination").page_size if "pagination" in filters else 10,
+            pages=1
+        )
+
+    service.get_all.side_effect = mock_get_all
+
+    async def mock_get(task_id):
+        if task_id == uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca"):
+            return {
+                "id": task_id,
+                "title": "Test Task",
+                "description": "Test Description",
+                "status": TaskStatus.NEW,
+                "user_id": uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca"),
+                "user": {
+                    "id": uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca"),
+                    "username": "testuser",
+                    "first_name": "Test",
+                    "last_name": "Test"
+                }
+            }
+        else:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Task with id {task_id} not found")
+
+    service.get.side_effect = mock_get
 
     async def mock_get_user_task(user_id, **filters):
         items = [
@@ -126,7 +186,75 @@ def mock_task_service():
 
 
 @pytest.fixture
-def override_dependencies(mock_current_user, mock_task_service):
+def mock_auth_service():
+    service = AsyncMock(spec=AuthService)
+
+    async def mock_register(user_data, response):
+        user_id = uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca")
+        response.set_cookie(
+            key="refresh_token",
+            value="mock_refresh_token",
+            httponly=True,
+            max_age=7 * 24 * 60 * 60,
+            secure=True,
+            samesite="strict"
+        )
+        return {"message": "Successfully registered", "user_id": user_id}
+
+    service.register.side_effect = mock_register
+
+    async def mock_login(login_data, response):
+        user_id = uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca")
+        if login_data.username == "testuser" and login_data.password == "password123":
+            response.set_cookie(
+                key="refresh_token",
+                value="mock_refresh_token",
+                httponly=True,
+                max_age=7 * 24 * 60 * 60,
+                secure=True,
+                samesite="strict"
+            )
+            return {"message": "Successfully logged in", "user_id": user_id}
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid username or password"
+            )
+
+    service.login.side_effect = mock_login
+
+    async def mock_refresh(request, response):
+        user_id = uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca")
+
+        if "refresh_token" not in request.cookies:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Refresh token missing"
+            )
+
+        if request.cookies["refresh_token"] == "mock_refresh_token":
+            response.set_cookie(
+                key="refresh_token",
+                value="new_mock_refresh_token",
+                httponly=True,
+                max_age=7 * 24 * 60 * 60,
+                secure=True,
+                samesite="strict"
+            )
+            return {"message": "Tokens refreshed successfully"}
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid refresh token"
+            )
+
+    service.refresh.side_effect = mock_refresh
+
+    return service
+
+
+@pytest.fixture
+def override_dependencies(mock_current_user, mock_task_service, mock_auth_service):
     async def mock_get_current_user():
         return mock_current_user
 
@@ -134,6 +262,7 @@ def override_dependencies(mock_current_user, mock_task_service):
         get_current_user: mock_get_current_user,
     }
     app.container.task_service.override(mock_task_service)
+    app.container.auth_service.override(mock_auth_service)
 
     yield
 
