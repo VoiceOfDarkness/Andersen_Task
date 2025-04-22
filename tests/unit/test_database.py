@@ -67,13 +67,11 @@ async def test_session_rollback_on_error(db, mock_db_session):
     db._session_factory = mock_session_factory
 
     with patch('logging.error') as mock_log_error:
-        try:
+        with pytest.raises(SQLAlchemyError, match="Test Error"):
             async with db.session() as session:
-                pass
-        except SQLAlchemyError:
-            pytest.fail("Exception should be caught inside session context")
+                raise SQLAlchemyError("Test Error")
 
-        mock_session.commit.assert_called_once()
+        mock_session.commit.assert_not_called()
         mock_session.rollback.assert_called_once()
         mock_session.close.assert_called_once()
         mock_session_factory.remove.assert_called_once()
