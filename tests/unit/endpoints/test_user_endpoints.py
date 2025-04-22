@@ -1,7 +1,7 @@
 import uuid
 
 from fastapi import HTTPException, status
-from models.task import TaskStatus
+from app.models.task import TaskStatus
 
 
 def test_create_task(client, mock_task_service, override_dependencies):
@@ -11,7 +11,7 @@ def test_create_task(client, mock_task_service, override_dependencies):
         "status": "New"
     }
 
-    response = client.post("/user/task", json=task_data)
+    response = client.post("/api/v1/user/task", json=task_data)
 
     print(response.status_code)
 
@@ -28,7 +28,7 @@ def test_create_task(client, mock_task_service, override_dependencies):
 
 
 def test_get_user_tasks(client, mock_task_service, override_dependencies):
-    response = client.get("/user/tasks")
+    response = client.get("/api/v1/user/tasks")
 
     assert response.status_code == 200
     assert "items" in response.json()
@@ -41,7 +41,7 @@ def test_get_user_tasks(client, mock_task_service, override_dependencies):
 
 
 def test_get_user_tasks_with_filter(client, mock_task_service, override_dependencies):
-    response = client.get("/user/tasks?status=New")
+    response = client.get("/api/v1/user/tasks?status=New")
 
     assert response.status_code == 200
 
@@ -56,7 +56,7 @@ def test_update_task(client, mock_task_service, override_dependencies):
         "description": "Updated Task Description"
     }
 
-    response = client.patch(f"/user/task?task_id={task_id}", json=update_data)
+    response = client.patch(f"/api/v1/user/task?task_id={task_id}", json=update_data)
 
     assert response.status_code == 200
     assert response.json()["title"] == "Updated Task Title"
@@ -75,7 +75,7 @@ def test_update_task(client, mock_task_service, override_dependencies):
 def test_update_task_status(client, mock_task_service, override_dependencies):
     task_id = "fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca"
 
-    response = client.patch(f"/user/task?task_id={task_id}&status=Completed", json={})
+    response = client.patch(f"/api/v1/user/task?task_id={task_id}&status=Completed", json={})
 
     assert response.status_code == 200
     assert response.json()["status"] == "Completed"
@@ -93,7 +93,7 @@ def test_update_nonexistent_task(client, mock_task_service, override_dependencie
     mock_task_service.update_user_task.side_effect = HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                                                    detail=f"object with id {id} not found")
 
-    response = client.patch(f"/user/task?task_id={task_id}", json=update_data)
+    response = client.patch(f"/api/v1/user/task?task_id={task_id}", json=update_data)
 
     assert response.status_code == 404
     assert "not found" in response.json()["detail"]
@@ -102,7 +102,7 @@ def test_update_nonexistent_task(client, mock_task_service, override_dependencie
 def test_delete_task(client, mock_task_service, override_dependencies):
     task_id = "fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca"
 
-    response = client.delete(f"/user/task?task_id={task_id}")
+    response = client.delete(f"/api/v1/user/task?task_id={task_id}")
 
     assert response.status_code == 204
 
@@ -118,7 +118,7 @@ def test_delete_nonexistent_task(client, mock_task_service, override_dependencie
     mock_task_service.delete_user_task.side_effect = HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                                                    detail=f"object with id {id} not found")
 
-    response = client.delete(f"/user/task?task_id={task_id}")
+    response = client.delete(f"/api/v1/user/task?task_id={task_id}")
 
     assert response.status_code == 404
     assert "not found" in response.json()["detail"]

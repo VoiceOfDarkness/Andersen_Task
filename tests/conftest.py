@@ -6,8 +6,8 @@ from app.api.deps import get_current_user
 from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 from fastapi.testclient import TestClient
-from schemas.pagination import PaginationResponse
-from services import TaskService, AuthService
+from app.schemas.pagination import PaginationResponse
+from app.services import TaskService, AuthService
 
 from app.core.config import settings
 from app.core.database import Database

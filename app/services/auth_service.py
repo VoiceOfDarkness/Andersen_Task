@@ -7,6 +7,7 @@ from app.services.base_service import BaseService
 from app.schemas.user import UserCreate, UserInDB
 from app.repository.user_repository import UserRepository
 from app.core.security import hash_password, create_tokens, verify_password, decode_token
+from app.core.exceptions import ObjectNotFoundException
 
 
 class AuthService(BaseService[User, UserInDB, UserCreate, UserRepository]):
@@ -104,3 +105,5 @@ class AuthService(BaseService[User, UserInDB, UserCreate, UserRepository]):
             return {"message": "Tokens refreshed successfully"}
         except JWTError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
+        except ObjectNotFoundException:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")

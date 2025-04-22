@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 
-from schemas.auth import LoginRequest
-from schemas.user import UserCreate
+from app.schemas.auth import LoginRequest
+from app.schemas.user import UserCreate
 
 
 def test_register(client, mock_auth_service, override_dependencies):
@@ -12,7 +12,7 @@ def test_register(client, mock_auth_service, override_dependencies):
         "last_name": "User"
     }
 
-    response = client.post("/auth/register", json=user_data)
+    response = client.post("/api/v1/auth/register", json=user_data)
 
     assert response.status_code == 200
 
@@ -28,7 +28,7 @@ def test_login_success(client, mock_auth_service, override_dependencies):
         "password": "password123"
     }
 
-    response = client.post("/auth/login", json=login_data)
+    response = client.post("/api/v1/auth/login", json=login_data)
 
     assert response.status_code == 200
 
@@ -49,7 +49,7 @@ def test_login_failure(client, mock_auth_service, override_dependencies):
         "password": "wrongpassword"
     }
 
-    response = client.post("/auth/login", json=login_data)
+    response = client.post("/api/v1/auth/login", json=login_data)
 
     assert response.status_code == 401
     assert "Invalid username or password" in response.json()["detail"]
@@ -60,7 +60,7 @@ def test_login_failure(client, mock_auth_service, override_dependencies):
 def test_refresh_token_success(client, mock_auth_service, override_dependencies):
     client.cookies.set("refresh_token", "mock_refresh_token")
 
-    response = client.post("/auth/refresh")
+    response = client.post("/api/v1/auth/refresh")
 
     assert response.status_code == 200
 
@@ -76,7 +76,7 @@ def test_refresh_token_missing(client, mock_auth_service, override_dependencies)
         detail="Refresh token missing"
     )
 
-    response = client.post("/auth/refresh")
+    response = client.post("/api/v1/auth/refresh")
 
     assert response.status_code == 401
     assert "Refresh token missing" in response.json()["detail"]
@@ -92,7 +92,7 @@ def test_refresh_token_invalid(client, mock_auth_service, override_dependencies)
 
     client.cookies.set("refresh_token", "invalid_refresh_token")
 
-    response = client.post("/auth/refresh")
+    response = client.post("/api/v1/auth/refresh")
 
     assert response.status_code == 401
     assert "Invalid refresh token" in response.json()["detail"]
