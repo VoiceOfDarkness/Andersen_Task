@@ -188,34 +188,31 @@ The API uses JWT tokens stored in HTTP-only cookies for authentication:
 
 ```python
 class User(Base):
-    __tablename__ = "user"
+    __tablename__ = 'user'
     __table_args__ = {'extend_existing': True}
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    username = Column(String(50), unique=True, index=True, nullable=False)
-    first_name = Column(String(50))
-    last_name = Column(String(50))
-    password = Column(String(255), nullable=False)
-
-    tasks = relationship("Task", back_populates="user", cascade="all, delete-orphan")
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    first_name: Mapped[str] = mapped_column(String, nullable=False)
+    last_name: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    username: Mapped[Optional[str]] = mapped_column(String, nullable=True, unique=True)
+    password: Mapped[str] = mapped_column(String, nullable=False)
+    tasks: Mapped["Task"] = relationship(back_populates="user", cascade="all, delete-orphan")  # noqa
 ```
 
 ### Task Model
 
 ```python
 class Task(Base):
-    __tablename__ = "task"
+    __tablename__ = 'task'
     __table_args__ = {'extend_existing': True}
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    title = Column(String(100), nullable=False)
-    description = Column(Text, nullable=True)
-    status = Column(String(20), default="pending")
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-
-    user = relationship("User", back_populates="tasks")
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    title: Mapped[str] = mapped_column(String, nullable=False)
+    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    status: Mapped[Annotated[TaskStatus, "Current status of task"]] = mapped_column(Enum(TaskStatus),
+                                                                                    default=TaskStatus.NEW)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('user.id'))
+    user: Mapped["User"] = Relationship(back_populates="tasks")  # noqa
 ```
 
 ## 🧪 Testing
