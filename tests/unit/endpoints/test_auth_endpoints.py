@@ -1,8 +1,5 @@
 from fastapi import HTTPException, status
 
-from app.schemas.auth import LoginRequest
-from app.schemas.user import UserCreate
-
 
 def test_register(client, mock_auth_service, override_dependencies):
     user_data = {

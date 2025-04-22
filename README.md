@@ -8,10 +8,8 @@ TODO list API is a task management system that allows users to create, update, d
 FastAPI's asynchronous framework, it provides high-performance API endpoints with automatic validation, serialization,
 and documentation.
 <p align="center">
-  <img src="<p align="center">
-  <img src="path/to/your/image.png" alt="Swagger" width="200"/>
-</p>" alt="Project Logo" width="200"/>
-
+  <img src="" alt="Project Logo" width="200"/>
+</p>
 ## ✨ Features
 
 - **User Authentication**: Secure JWT-based authentication with token refresh mechanism

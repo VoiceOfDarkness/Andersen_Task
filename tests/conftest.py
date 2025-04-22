@@ -2,17 +2,17 @@ import uuid
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
-from app.api.deps import get_current_user
 from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 from fastapi.testclient import TestClient
-from app.schemas.pagination import PaginationResponse
-from app.services import TaskService, AuthService
 
+from app.api.deps import get_current_user
 from app.core.config import settings
 from app.core.database import Database
 from app.main import app
+from app.schemas.pagination import PaginationResponse
 from app.schemas.task import TaskStatus
+from app.services import AuthService, TaskService
 
 
 @pytest.fixture
@@ -223,8 +223,6 @@ def mock_auth_service():
     service.login.side_effect = mock_login
 
     async def mock_refresh(request, response):
-        user_id = uuid.UUID("fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca")
-
         if "refresh_token" not in request.cookies:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
