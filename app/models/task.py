@@ -5,7 +5,7 @@ from typing import Optional, Annotated
 from sqlalchemy.orm import Mapped, mapped_column, Relationship
 from sqlalchemy import String, UUID, Text, Enum, ForeignKey
 
-from .base import Base
+from app.models.base import Base
 
 
 class TaskStatus(str, PyEnum):
@@ -16,6 +16,7 @@ class TaskStatus(str, PyEnum):
 
 class Task(Base):
     __tablename__ = 'task'
+    __table_args__ = {'extend_existing': True}
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     title: Mapped[str] = mapped_column(String, nullable=False)

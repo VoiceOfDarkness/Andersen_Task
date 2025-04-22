@@ -6,12 +6,12 @@ from fastapi import APIRouter, Depends, Query, Body
 
 from dependency_injector.wiring import inject, Provide
 
-from api.deps import get_current_user
-from core.di import Container
-from models import User
-from services.task_service import TaskService
-from schemas.pagination import PaginationResponse, PaginationParams
-from schemas.task import TaskCreate, TaskInDB, TaskUpdate, TaskUpdateInDB, TaskResponse, TaskStatus
+from app.api.deps import get_current_user
+from app.core.di import Container
+from app.models import User
+from app.services.task_service import TaskService
+from app.schemas.pagination import PaginationResponse, PaginationParams
+from app.schemas.task import TaskCreate, TaskInDB, TaskUpdate, TaskUpdateInDB, TaskResponse, TaskStatus
 
 user_router = APIRouter(tags=["user"], prefix="/user")
 

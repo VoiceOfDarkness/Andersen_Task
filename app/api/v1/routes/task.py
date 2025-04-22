@@ -4,15 +4,15 @@ import uuid
 
 from fastapi.params import Query
 
-from core.di import Container
-from models import User
-from schemas.pagination import PaginationParams
-from schemas.task import TaskResponse, TaskStatus
-from schemas.pagination import PaginationResponse
+from app.core.di import Container
+from app.models import User
+from app.schemas.pagination import PaginationParams
+from app.schemas.task import TaskResponse, TaskStatus
+from app.schemas.pagination import PaginationResponse
 from typing import Optional
 
-from api.deps import get_current_user
-from services.task_service import TaskService
+from app.api.deps import get_current_user
+from app.services.task_service import TaskService
 
 task_router = APIRouter(tags=["task"])
 

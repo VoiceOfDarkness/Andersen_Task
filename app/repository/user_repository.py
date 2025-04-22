@@ -1,8 +1,8 @@
 from sqlalchemy.future import select
 
-from repository.base_repository import BaseRepository
-from models.user import User
-from schemas.user import UserInDB
+from app.repository.base_repository import BaseRepository
+from app.models.user import User
+from app.schemas.user import UserInDB
 
 
 class UserRepository(BaseRepository[User, UserInDB, UserInDB]):

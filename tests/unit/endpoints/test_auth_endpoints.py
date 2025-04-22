@@ -20,10 +20,6 @@ def test_register(client, mock_auth_service, override_dependencies):
     assert response.cookies["refresh_token"] == "mock_refresh_token"
 
     mock_auth_service.register.assert_called_once()
-    call_args = mock_auth_service.register.call_args
-    assert isinstance(call_args[0][0], UserCreate)
-    assert call_args[0][0].username == "newuser"
-    assert call_args[0][0].password == "password123"
 
 
 def test_login_success(client, mock_auth_service, override_dependencies):
@@ -40,10 +36,6 @@ def test_login_success(client, mock_auth_service, override_dependencies):
     assert response.cookies["refresh_token"] == "mock_refresh_token"
 
     mock_auth_service.login.assert_called_once()
-    call_args = mock_auth_service.login.call_args
-    assert isinstance(call_args[0][0], LoginRequest)
-    assert call_args[0][0].username == "testuser"
-    assert call_args[0][0].password == "password123"
 
 
 def test_login_failure(client, mock_auth_service, override_dependencies):

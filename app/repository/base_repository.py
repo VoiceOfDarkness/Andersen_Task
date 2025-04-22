@@ -4,8 +4,8 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from models.base import Base
-from core.exceptions import ObjectNotFoundException
+from app.models.base import Base
+from app.core.exceptions import ObjectNotFoundException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 

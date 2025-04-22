@@ -4,7 +4,7 @@ from typing import Dict, Tuple
 from uuid import UUID
 
 from jose import jwt, JWTError
-from core.config import settings
+from app.core.config import settings
 
 from passlib.context import CryptContext
 

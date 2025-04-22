@@ -1,19 +1,19 @@
 from dependency_injector import containers, providers
 
-from .config import settings
-from .database import Database
+from app.core.config import settings
+from app.core.database import Database
 
-from repository import UserRepository, TaskRepository
-from services import UserService, TaskService, AuthService
+from app.repository import UserRepository, TaskRepository
+from app.services import UserService, TaskService, AuthService
 
 
 class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
-            "api.v1.routes.task",
-            "api.v1.routes.auth",
-            "api.v1.routes.user",
-            "api.deps"
+            "app.api.v1.routes.task",
+            "app.api.v1.routes.auth",
+            "app.api.v1.routes.user",
+            "app.api.deps"
         ]
     )
 

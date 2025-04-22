@@ -3,12 +3,12 @@ from uuid import UUID
 from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 
-from core.exceptions import ObjectNotFoundException
-from models import Task
-from repository.task_repository import TaskRepository
-from schemas.pagination import PaginationResponse
-from schemas.task import TaskInDB, TaskUpdateInDB
-from services.base_service import BaseService
+from app.core.exceptions import ObjectNotFoundException
+from app.models import Task
+from app.repository.task_repository import TaskRepository
+from app.schemas.pagination import PaginationResponse
+from app.schemas.task import TaskInDB, TaskUpdateInDB
+from app.services.base_service import BaseService
 
 
 class TaskService(BaseService[Task, TaskInDB, TaskUpdateInDB, TaskRepository]):

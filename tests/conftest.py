@@ -2,12 +2,11 @@ import uuid
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
-from api.deps import get_current_user
+from app.api.deps import get_current_user
 from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 from fastapi.testclient import TestClient
 from schemas.pagination import PaginationResponse
-from schemas.user import UserResponse
 from services import TaskService, AuthService
 
 from app.core.config import settings

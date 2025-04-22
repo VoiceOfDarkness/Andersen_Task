@@ -4,7 +4,7 @@ from enum import Enum
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from schemas.user import UserBase
+from app.schemas.user import UserBase
 
 
 class TaskStatus(str, Enum):
