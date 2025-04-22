@@ -88,7 +88,7 @@ class TaskRepository(BaseRepository[Task, TaskInDB, TaskUpdateInDB]):
                 stmt = stmt.offset(pagination.offset).limit(pagination.page_size)
 
             record = await session.execute(stmt)
-            record = record.scalars().one_or_none()
+            record = record.scalars().all()
             if record is None:
                 raise ObjectNotFoundException(self.model_class.__name__, id)
 

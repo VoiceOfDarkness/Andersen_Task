@@ -28,7 +28,6 @@ class TaskCreate(TaskBase):
 class TaskUpdate(BaseModel):
     title: Optional[str] = Field(default=None)
     description: Optional[str] = Field(default=None)
-    status: Optional[TaskStatus] = Field(default=None)
 
 
 class TaskResponse(TaskBase):
@@ -44,3 +43,4 @@ class TaskInDB(TaskBase):
 
 class TaskUpdateInDB(TaskUpdate):
     model_config = ConfigDict(from_attributes=True)
+    status: Optional[TaskStatus] = Field(default=None)

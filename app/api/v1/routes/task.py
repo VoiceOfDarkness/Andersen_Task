@@ -5,12 +5,13 @@ import uuid
 from fastapi.params import Query
 
 from core.di import Container
+from models import User
 from schemas.pagination import PaginationParams
 from schemas.task import TaskResponse, TaskStatus
 from schemas.pagination import PaginationResponse
 from typing import Optional
 
-from api.deps import CurrentUser
+from api.deps import get_current_user
 from services.task_service import TaskService
 
 task_router = APIRouter(tags=["task"])
@@ -19,7 +20,7 @@ task_router = APIRouter(tags=["task"])
 @task_router.get("/tasks", response_model=PaginationResponse[TaskResponse])
 @inject
 async def get_tasks(
-        _current_user: CurrentUser,
+        _current_user: User = Depends(get_current_user),
         pagination: PaginationParams = Depends(),
         status: Optional[TaskStatus] = Query(None, description="Filter tasks by status"),
         task_service: TaskService = Depends(Provide[Container.task_service])):
@@ -28,7 +29,7 @@ async def get_tasks(
 
 @task_router.get("/task", response_model=Optional[TaskResponse])
 @inject
-async def get_task(_current_user: CurrentUser,
-                   task_id: uuid.UUID = Query(..., example="fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca"),
+async def get_task(_current_user: User = Depends(get_current_user),
+                   task_id: uuid.UUID = Query(..., examples=["fa90ea32-1d7c-4ee8-9b68-07e6b4a813ca"]),
                    task_service: TaskService = Depends(Provide[Container.task_service])):
     return await task_service.get(task_id)

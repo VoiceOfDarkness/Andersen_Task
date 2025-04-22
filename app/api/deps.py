@@ -1,11 +1,8 @@
-from typing import Annotated
-
 from fastapi import Depends, Request, status, HTTPException
 
 from dependency_injector.wiring import inject, Provide
 from jose import JWTError
 
-from models.user import User
 from core.security import decode_token
 from core.di import Container
 from services import AuthService
@@ -36,6 +33,3 @@ async def get_current_user(request: Request, auth_service: AuthService = Depends
     if not user:
         raise credentials_exception
     return user
-
-
-CurrentUser = Annotated[User, Depends(get_current_user)]
