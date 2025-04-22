@@ -4,7 +4,13 @@ An asynchronous REST API for task management built with FastAPI, SQLAlchemy, and
 
 ## 📋 Overview
 
-TODO list API is a task management system that allows users to create, update, delete, and track tasks. Built on FastAPI's asynchronous framework, it provides high-performance API endpoints with automatic validation, serialization, and documentation.
+TODO list API is a task management system that allows users to create, update, delete, and track tasks. Built on
+FastAPI's asynchronous framework, it provides high-performance API endpoints with automatic validation, serialization,
+and documentation.
+<p align="center">
+  <img src="<p align="center">
+  <img src="path/to/your/image.png" alt="Swagger" width="200"/>
+</p>" alt="Project Logo" width="200"/>
 
 ## ✨ Features
 
@@ -37,12 +43,14 @@ TODO list API is a task management system that allows users to create, update, d
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/VoiceOfDarkness/Andersen_Task.git
 cd Andersen_Task
 ```
 
 2. Create a `.env` file in the project root with the following variables:
+
 ```
 # Database settings
 POSTGRES_USER=postgres
@@ -56,6 +64,7 @@ SECRET_KEY=your-secret-key
 ```
 
 3. Build and start the Docker containers:
+
 ```bash
 docker-compose up --build -d
 ```
@@ -65,6 +74,7 @@ docker-compose up --build -d
 ## 📚 API Documentation
 
 Once the application is running, you can access:
+
 - Swagger UI: `http://localhost:8000/docs`
 - ReDoc: `http://localhost:8000/redoc`
 
@@ -138,62 +148,66 @@ The API uses JWT tokens stored in HTTP-only cookies for authentication:
 ## 📡 API Endpoints
 
 ### Authentication
+
 - `POST /auth/register`: Register a new user
-  - Request Body: `UserCreate` schema
-  - Response: User data with authentication tokens in cookies
+    - Request Body: `UserCreate` schema
+    - Response: User data with authentication tokens in cookies
 
 - `POST /auth/login`: Login an existing user
-  - Request Body: `LoginRequest` schema
-  - Response: User data with authentication tokens in cookies
+    - Request Body: `LoginRequest` schema
+    - Response: User data with authentication tokens in cookies
 
 - `POST /auth/refresh`: Refresh authentication token
-  - Uses refresh token from cookies
-  - Response: New authentication tokens in cookies
+    - Uses refresh token from cookies
+    - Response: New authentication tokens in cookies
 
 ### Tasks
+
 - `POST /user/task`: Create a new task
-  - Request Body: `TaskCreate` schema
-  - Response: Created task data
+    - Request Body: `TaskCreate` schema
+    - Response: Created task data
 
 - `DELETE /user/task`: Delete a task
-  - Query Parameters: `task_id` (UUID)
-  - Response: 204 No Content on success
+    - Query Parameters: `task_id` (UUID)
+    - Response: 204 No Content on success
 
 - `PATCH /user/task`: Update a task
-  - Query Parameters: `task_id` (UUID), optional `status`
-  - Request Body (optional): `TaskUpdate` schema
-  - Response: Updated task data
+    - Query Parameters: `task_id` (UUID), optional `status`
+    - Request Body (optional): `TaskUpdate` schema
+    - Response: Updated task data
 
 - `GET /user/tasks`: List user's tasks
-  - Query Parameters: 
-    - `page`: Page number (default: 1)
-    - `page_size`: Items per page (default: 10)
-    - `status`: Filter by task status (optional)
-  - Response: `PaginationResponse` with task data
+    - Query Parameters:
+        - `page`: Page number (default: 1)
+        - `page_size`: Items per page (default: 10)
+        - `status`: Filter by task status (optional)
+    - Response: `PaginationResponse` with task data
 
 ## 📊 Data Models
 
 ### User Model
+
 ```python
 class User(Base):
     __tablename__ = "user"
     __table_args__ = {'extend_existing': True}
-    
+
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     username = Column(String(50), unique=True, index=True, nullable=False)
     first_name = Column(String(50))
     last_name = Column(String(50))
     password = Column(String(255), nullable=False)
-    
+
     tasks = relationship("Task", back_populates="user", cascade="all, delete-orphan")
 ```
 
 ### Task Model
+
 ```python
 class Task(Base):
     __tablename__ = "task"
     __table_args__ = {'extend_existing': True}
-    
+
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     title = Column(String(100), nullable=False)
     description = Column(Text, nullable=True)
@@ -201,7 +215,7 @@ class Task(Base):
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-    
+
     user = relationship("User", back_populates="tasks")
 ```
 
