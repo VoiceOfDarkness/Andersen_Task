@@ -1,17 +1,11 @@
 import uuid
-from enum import Enum as PyEnum
 from typing import Annotated, Optional
 
 from sqlalchemy import UUID, Enum, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, Relationship, mapped_column
 
 from app.models.base import Base
-
-
-class TaskStatus(str, PyEnum):
-    NEW = "New"
-    IN_PROGRESS = "In progress"
-    COMPLETED = "Completed"
+from app.models.enum import TaskStatus
 
 
 class Task(Base):

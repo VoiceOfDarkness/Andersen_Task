@@ -5,12 +5,7 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.schemas.user import UserBase
-
-
-class TaskStatus(str, Enum):
-    NEW = "New"
-    IN_PROGRESS = "In progress"
-    COMPLETED = "Completed"
+from app.models.enum import TaskStatus
 
 
 class TaskBase(BaseModel):
