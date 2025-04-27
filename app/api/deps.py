@@ -20,6 +20,9 @@ async def get_current_user(request: Request, auth_service: AuthService = Depends
 
     try:
         payload = decode_token(token)
+        if not payload:
+            raise credentials_exception
+
         user_id = payload.get("sub")
 
         if user_id is None:
